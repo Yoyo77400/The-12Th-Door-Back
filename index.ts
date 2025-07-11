@@ -1,38 +1,54 @@
-import dotenv from 'dotenv'
-dotenv.config()
+import express from 'express';
+const cors = require('cors');
+import { config } from 'dotenv';
+import { MongooseService } from './services/mongoose';
+import { AuthController } from './controllers/index';
 
-import { verifyToken } from './middlewares/auth.middleware'
+config();
 
-import express from 'express'
-import mongoose from 'mongoose'
-import cors from 'cors'
-import { AuthController } from './controllers/auth.controller'
+function launchAPI() {
+  const app = express();
+  const port = process.env.PORT || 3000;
 
+  app.use(cors());
+  app.use(express.json());
 
+  app.use('/auth', AuthController.getInstance().buildRouter());
 
+  app.get('/', (req, res) => {
+    res.send('Welcome to The12ThDoor API');
+  });
 
-const app = express()
-const port = process.env.PORT || 3000
+  app.listen(process.env.PORT, async () => {
+    console.log(`The12ThDoor API is running on port ${port}`);
+  });
+}
 
-app.use(cors())
-app.use(express.json())
+async function setupAPI() {
+    const mongooseService = await MongooseService.getInstance();
+    const userService = mongooseService.userService;
+    const rootUser = await userService.getRootUser();
+    if (!rootUser) {
+        if (!process.env.ROOT_PUBLIC_KEY) {
+            throw new Error('ROOT_PUBLIC_KEY environment variable is not set');
+        }
+        const user = await userService.createUser({
+            walletAddress: process.env.ROOT_PUBLIC_KEY,
+            isAdmin: true,
 
-app.use('/auth', AuthController.getInstance().buildRouter())
+        }, process.env.ROOT_PUBLIC_KEY);
+        console.log('Root user created:', user);
+    } else {
+        console.log('Root user already exists');
+    }
+}
 
-app.get('/me', verifyToken, (req, res) => {
-  // @ts-ignore
-  res.json({ message: 'Tu es authentifié ', user: req.user })
-})
+async function main() {
+  await setupAPI();
+  launchAPI();
+}
 
-
-mongoose.connect(process.env.MONGO_URI!)
-  .then(() => {
-    console.log('Mongo connecté')
-    app.listen(port, () => {
-      console.log(`API en ligne sur http://localhost:${port}`)
-    })
-  })
-  .catch(err => {
-    console.error('Erreur MongoDB :', err)
-    process.exit(1)
-  })
+main().catch((error) => {
+  console.error('Error starting The12ThDoor API:', error);
+  process.exit(1);
+});
