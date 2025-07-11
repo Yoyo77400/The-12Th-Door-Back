@@ -1,14 +1,22 @@
 import { Mongoose, connect } from "mongoose";
-import { UserService } from "./index";
+import { UserService, SeasonService, MatchService, MatchNFTService, FidelityNFTService } from "./index";
 
 export class MongooseService {
   private static instance?: MongooseService;
   public mongoose: Mongoose;
   public userService : UserService;
+  public seasonService: SeasonService;
+  public matchService: MatchService;
+  public matchNFTService: MatchNFTService;
+  public fidelityNFTService: FidelityNFTService;
 
   private constructor(mongoose: Mongoose) {
     this.mongoose = mongoose;
     this.userService = new UserService(this);
+    this.seasonService = new SeasonService(this);
+    this.matchService = new MatchService(this);
+    this.matchNFTService = new MatchNFTService(this);
+    this.fidelityNFTService = new FidelityNFTService(this);
   }
 
   public static async getInstance(): Promise<MongooseService> {

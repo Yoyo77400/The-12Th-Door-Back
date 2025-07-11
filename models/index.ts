@@ -1,2 +1,6 @@
 export * from './user.model'
 export * from './TimeStamp.interface'
+export * from './matchNFT.interface'
+export * from './season.interface'
+export * from './fedelityNFT.interface'
+export * from './match.interface'
