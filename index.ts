@@ -2,7 +2,7 @@ import express from 'express';
 const cors = require('cors');
 import { config } from 'dotenv';
 import { MongooseService } from './services/mongoose';
-import { AuthController, SeasonController, FidelityNFTController, MatchController, MatchNFTController } from './controllers/index';
+import { AuthController, SeasonController, FidelityNFTController, MatchController, MatchNFTController, ImageController } from './controllers/index';
 
 config();
 
@@ -18,6 +18,8 @@ function launchAPI() {
   app.use('/fidelity-nft', FidelityNFTController.getInstance().buildRouter());
   app.use('/match', MatchController.getInstance().buildRouter());
   app.use('/match-nft', MatchNFTController.getInstance().buildRouter());
+  app.use('/image', ImageController.getInstance().buildRouter());
+
 
   app.get('/', (req, res) => {
     res.send('Welcome to The12ThDoor API');

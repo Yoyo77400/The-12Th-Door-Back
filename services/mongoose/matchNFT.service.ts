@@ -38,6 +38,7 @@ export class MatchNFTService {
       console.log("Match NFT is already minted:", matchNFT);
       return matchNFT;
     }
+  
     matchNFT.updateOne({ isMinted: true }).exec();
     
     const fidelityNFT = await this.fidelityNFTModel.findOneAndUpdate(
@@ -66,5 +67,27 @@ export class MatchNFTService {
       return null;
     }
     return matchNFT;
+  }
+
+  async setRarity(_id: string): Promise<IMatchNFT | null> {
+    const chance = Math.random() * 1000;
+    let rarity: string;
+    if (chance < 1) {
+      rarity = 'legendary';
+    } else if (chance > 1 && chance < 100) {
+      rarity = 'epic';
+    } else if (chance > 100 && chance < 400) {
+      rarity = 'rare';
+    } else {
+      rarity = 'common';
+    }
+    console.log("Setting rarity for Match NFT:", _id, "Rarity:", rarity);
+    const updatedMatchNFT = await this.matchNFTModel.findByIdAndUpdate(_id, { rarity }, { new: true }).exec();
+    if (!updatedMatchNFT) {
+      console.log("Failed to update Match NFT rarity for id:", _id);
+      return null;
+    }
+    console.log("Match NFT rarity updated successfully:", updatedMatchNFT);
+    return updatedMatchNFT;
   }
 }

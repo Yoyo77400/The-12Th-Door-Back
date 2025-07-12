@@ -1,5 +1,7 @@
 import express from 'express';
 import { MongooseService } from '../services/mongoose';
+import adminMiddleware from '../middlewares/admin.middleware';
+
 
 export class MatchNFTController {
     private static instance: MatchNFTController;
@@ -9,6 +11,8 @@ export class MatchNFTController {
         }
         return this.instance;
     }
+
+    
 
     async createMatchNFT(req: express.Request, res: express.Response): Promise<void> {
         const data = req.body.data;
@@ -33,7 +37,12 @@ export class MatchNFTController {
                 res.status(404).json({ error: "Match NFT not found" });
                 return;
             }
-            res.status(200).json(matchNFT);
+            const updateMatchNFT = await matchNFTService.setRarity(id);
+            if (!updateMatchNFT) {
+                res.status(404).json({ error: "Match NFT not found for rarity update" });
+                return;
+            }
+            res.status(200).json(updateMatchNFT);
         } catch (error) {
             console.error("Error setting match NFT as minted:", error);
             res.status(500).json({ error: "Failed to set match NFT as minted" });
@@ -69,6 +78,10 @@ export class MatchNFTController {
                     {
                     trait_type: "Minted",
                     value: matchNFT.isMinted ? "Yes" : "No"
+                    },
+                    {
+                    trait_type: "Rarity",
+                    value: matchNFT.rarity || "Common"
                     }
                 ]
             });
@@ -78,12 +91,40 @@ export class MatchNFTController {
             res.status(500).json({ error: "Failed to fetch match NFT" });
         }
     }
+
+    async setRarity(req: express.Request, res: express.Response): Promise<void> {
+        const _id  = req.params.id;
+
+        console.log("Received id for setRarity:", req.params.id); // Important pour debug
+    
+        if (!_id) {
+            res.status(400).json({ error: "Missing ID parameter" });
+            return;
+        }
+        const mongooseService = await MongooseService.getInstance();
+        const matchNFTService = mongooseService.matchNFTService;
+        
+        try {
+            const matchNFT = await matchNFTService.setRarity(_id);
+            if (!matchNFT) {
+                console.error("Match NFT not found for rarity update:", _id);
+                return;
+            }
+            console.log("Match NFT rarity updated:", matchNFT);
+             res.status(200).json(matchNFT);
+             return; 
+        } catch (error) {
+            console.error("Error updating match NFT rarity:");
+            return;
+        }
+    }
     
     buildRouter(): express.Router {
         const router = express.Router();
         router.post("/create", express.json(), this.createMatchNFT.bind(this));
         router.post("/:id/set-minted", express.json(), this.setMinted.bind(this));
         router.get("/:matchId/:walletAddress", this.getByMatchIdAndWalletAddress.bind(this));
+        router.post("/:id/set-rarity",express.json(), adminMiddleware(), this.setRarity.bind(this));
         return router;
     }
 }
