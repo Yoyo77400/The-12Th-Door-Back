@@ -15,6 +15,5 @@ export interface IMatch {
     };
     status: MatchStatus;
     stadium: string;
-    referee: string;
-    seasonId: string; 
+    seasonId?: string; 
 }

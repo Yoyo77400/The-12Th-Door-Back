@@ -13,14 +13,17 @@ export class FidelityNFTController {
     }
 
     async createFidelityNFT(req: express.Request, res: express.Response): Promise<void> {
-        const data  = req.body.data;
         const mongooseService = await MongooseService.getInstance();
+        const data  = {
+            ...req.body.data,
+            seasonId : new mongooseService.mongoose.Types.ObjectId(req.body.data.seasonId),
+        }
         const fidelityNFTService = mongooseService.fidelityNFTService;
         try {
             const fidelityNFT = await fidelityNFTService.createFidelityNFT(data);
             res.status(201).json(fidelityNFT);
         } catch (error) {
-            console.error("Error creating Fidelity NFT:", error);
+            console.error("❌ Error creating Fidelity NFT:", error);
             res.status(500).json({ error: "Failed to create Fidelity NFT" });
         }
     }

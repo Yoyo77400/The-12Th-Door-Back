@@ -14,4 +14,10 @@ export class MatchNFTService {
     this.mongooseService = mongooseService;
     this.matchNFTModel = mongooseService.mongoose.model(Models.MatchNFT, MatchNFTSchema);
   }
+
+  async createMatchNFT(data: ICreateMatchNFT): Promise<IMatchNFT> {
+    console.log("Creating match NFT with data:", data);
+    const matchNFT = await this.matchNFTModel.create(data);
+    return matchNFT;
+  }
 }

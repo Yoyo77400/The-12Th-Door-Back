@@ -14,14 +14,12 @@ export class SeasonController {
 
     async createSeason(req: express.Request, res: express.Response): Promise<void> {
         const season  = req.body.season;
-        console.log("Creating season with data:", season);
         const mongooseService = await MongooseService.getInstance();
         const seasonService = mongooseService.seasonService;
         try {
             const newSeason = await seasonService.createSeason(season);
             res.status(201).json(season);
         } catch (error) {
-            console.error("Error creating season:", error);
             res.status(500).json({ error: "Failed to create season" });
         }
     }

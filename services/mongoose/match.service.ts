@@ -14,4 +14,10 @@ export class MatchService {
     this.mongooseService = mongooseService;
     this.matchModel = mongooseService.mongoose.model(Models.Match, MatchSchema);
   }
+
+  async createMatch(data: ICreateMatch): Promise<IMatch> {
+    console.log("Creating match with data:", data);
+    const match = await this.matchModel.create(data);
+    return match;
+  }
 }

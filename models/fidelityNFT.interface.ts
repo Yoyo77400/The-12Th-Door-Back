@@ -6,11 +6,13 @@ export enum FidelityLevel {
     GOLD = 3,
     PLATINUM = 4,
 }
-export interface IFidelityNFT extends ITimestamp {
+export interface IFidelityNFT {
     _id: string;
     walletAddress: string;
+    seasonId?: string;
     isMinted: boolean;
     fidelityPoints: number;
     fidelityLevel: FidelityLevel;
+    matchNFTMinted: number;
     mediaUrl: string;
 }

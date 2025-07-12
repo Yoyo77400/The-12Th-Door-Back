@@ -11,8 +11,7 @@ export const MatchSchema = new Schema<IMatch>({
     },
     status: { type: String, enum: Object.values(MatchStatus), default: MatchStatus.SCHEDULED },
     stadium: { type: String, required: true },
-    referee: { type: String, required: true },
-    seasonId: { type: String, required: true }
+    seasonId: { type: Schema.Types.ObjectId, ref:"seasons", required: true }
 
 }, {
     timestamps: true,

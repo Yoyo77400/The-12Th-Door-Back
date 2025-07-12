@@ -16,10 +16,10 @@ export class FidelityNFTService {
   }
 
   async createFidelityNFT(data: ICreateFidelityNFT ): Promise<IFidelityNFT> {
-    const isMinted = false;
-    const fidelityPoints = 0;
-    const fidelityLevel = FidelityLevel.BRONZE;
-    const fidelityNFT = this.fidelityNFTModel.create(data);
+    console.log("Creating fidelity NFT with data:", data);
+    console.log("seasonId type:", typeof data.seasonId);
+    console.log("Final fidelityLevel type:", typeof data.fidelityLevel, "value:", data.fidelityLevel);
+    const fidelityNFT = await this.fidelityNFTModel.create(data);
     return fidelityNFT;
   }
 

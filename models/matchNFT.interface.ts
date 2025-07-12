@@ -5,5 +5,6 @@ export interface IMatchNFT extends ITimestamp {
     walletAddress: string;
     isMinted: boolean;
     matchId?: string;
+    seasonId?: string;
     mediaUrl: string;
 }
