@@ -7,7 +7,7 @@ export async function loginWithWallet(walletAddress: string) {
   if (!walletAddress) {
     throw new Error('Wallet address is required');
   }
-  let user = await userService.getUserByPublicKey(walletAddress);
+  let user = await userService.getUserByWalletAddress(walletAddress);
   if (!user) {
     user = await userService.createUser({
       walletAddress,

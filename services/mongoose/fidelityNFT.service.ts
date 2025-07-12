@@ -1,17 +1,30 @@
-import { IFedelityNFT } from "../../models";
+import { IFidelityNFT, FidelityLevel } from "../../models";
 import { FidelityNFTSchema } from "./schemas/fidelityNFT.schema";
 import { Model } from "mongoose";
 import { MongooseService } from "./mongoose.service";
 import { Models } from "./mongoose.models";
 
-export type ICreateFidelityNFT = Omit<IFedelityNFT, "_id">;
+export type ICreateFidelityNFT = Omit<IFidelityNFT, "_id">;
 
 export class FidelityNFTService {
     readonly mongooseService: MongooseService;
-    readonly fidelityNFTModel: Model<IFedelityNFT>;
+    readonly fidelityNFTModel: Model<IFidelityNFT>;
 
   constructor(mongooseService: MongooseService) {
     this.mongooseService = mongooseService;
-    this.fidelityNFTModel = mongooseService.mongoose.model(Models.FidelityNFT, FidelityNFTSchema);
+    this.fidelityNFTModel = mongooseService.mongoose.model<IFidelityNFT>(Models.FidelityNFT, FidelityNFTSchema);
+  }
+
+  async createFidelityNFT(data: ICreateFidelityNFT ): Promise<IFidelityNFT> {
+    const isMinted = false;
+    const fidelityPoints = 0;
+    const fidelityLevel = FidelityLevel.BRONZE;
+    const fidelityNFT = this.fidelityNFTModel.create(data);
+    return fidelityNFT;
+  }
+
+  async getFidelityNFTById(id: string): Promise<IFidelityNFT | null> {
+    const fidelityNFT = await this.fidelityNFTModel.findById(id).exec();
+    return fidelityNFT;
   }
 }

@@ -2,7 +2,6 @@ import { Schema } from 'mongoose';
 import { IMatch, MatchStatus } from '../../../models';
 
 export const MatchSchema = new Schema<IMatch>({
-    _id: { type: String, required: true },
     homeTeam: { type: String, required: true },
     awayTeam: { type: String, required: true },
     matchDate: { type: Date, required: true },

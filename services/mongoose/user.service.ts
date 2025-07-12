@@ -30,7 +30,7 @@ export class UserService {
     return this.userModel.findOne({ walletAddress: rootPublicKey }).exec();
   }
 
-  async getUserByPublicKey(publicKey: string): Promise<IUser | null> {
+  async getUserByWalletAddress(publicKey: string): Promise<IUser | null> {
     return this.userModel.findOne({ walletAddress: publicKey }).exec();
   }
   

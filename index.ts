@@ -2,7 +2,7 @@ import express from 'express';
 const cors = require('cors');
 import { config } from 'dotenv';
 import { MongooseService } from './services/mongoose';
-import { AuthController } from './controllers/index';
+import { AuthController, SeasonController, FidelityNFTController } from './controllers/index';
 
 config();
 
@@ -14,6 +14,8 @@ function launchAPI() {
   app.use(express.json());
 
   app.use('/auth', AuthController.getInstance().buildRouter());
+  app.use('/season', SeasonController.getInstance().buildRouter());
+  app.use('/fidelity-nft', FidelityNFTController.getInstance().buildRouter());
 
   app.get('/', (req, res) => {
     res.send('Welcome to The12ThDoor API');

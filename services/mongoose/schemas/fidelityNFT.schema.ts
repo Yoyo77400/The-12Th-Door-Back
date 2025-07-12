@@ -1,8 +1,7 @@
 import { Schema } from 'mongoose';
-import { IFedelityNFT, FidelityLevel } from '../../../models';
+import { IFidelityNFT, FidelityLevel } from '../../../models';
 
-export const FidelityNFTSchema = new Schema<IFedelityNFT>({
-    _id: { type: String, required: true },
+export const FidelityNFTSchema = new Schema<IFidelityNFT>({
     walletAddress: { type: String, required: true },
     isMinted: { type: Boolean, default: false },
     fidelityPoints: { type: Number, default: 0 },

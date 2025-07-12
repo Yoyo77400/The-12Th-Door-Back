@@ -14,4 +14,10 @@ export class SeasonService {
     this.mongooseService = mongooseService;
     this.seasonModel = mongooseService.mongoose.model(Models.Season, SeasonSchema);
   }
+
+  async createSeason(season: ICreateSeason): Promise<ISeason> {
+    console.log("Creating season with data:",  season );
+    const newSeason = this.seasonModel.create(season);
+    return newSeason;
+  }
 }
