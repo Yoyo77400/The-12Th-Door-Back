@@ -4,3 +4,4 @@ export * from "./season.service";
 export * from "./match.service";
 export * from "./matchNFT.service";
 export * from "./fidelityNFT.service";
+export * from "./image.service";

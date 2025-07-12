@@ -20,6 +20,13 @@ export class FidelityNFTService {
     return fidelityNFT;
   }
 
+  async updateMediaUrl(nftId: string, url: string): Promise<void> {
+    await this.fidelityNFTModel.findByIdAndUpdate(nftId, {
+    mediaUrl: url
+    }).exec();
+  }
+
+
   async implementMatchNFTMinted(id: string, matchNFTMinted: number): Promise<IFidelityNFT | null> {
     const fidelityNFT = await this.fidelityNFTModel.findByIdAndUpdate(id, { matchNFTMinted }, { new: true }).exec();
     return fidelityNFT;
@@ -27,6 +34,14 @@ export class FidelityNFTService {
 
   async getFidelityNFTById(id: string): Promise<IFidelityNFT | null> {
     const fidelityNFT = await this.fidelityNFTModel.findById(id).exec();
+    return fidelityNFT;
+  }
+
+  async getFidelityNFTByWalletAddressAndSeasonId(walletAddress: string, seasonId: string): Promise<IFidelityNFT | null> {
+    const fidelityNFT = await this.fidelityNFTModel.findOne({ 
+      walletAddress, 
+      seasonId 
+    }).exec();
     return fidelityNFT;
   }
 }

@@ -3,5 +3,6 @@ export const Models = {
   Season: "Season",
   Match: "Match",
   MatchNFT: "MatchNFT",
-  FidelityNFT: "FidelityNFT"
+  FidelityNFT: "FidelityNFT",
+  Image: "Image"
 };

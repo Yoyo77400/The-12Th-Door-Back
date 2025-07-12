@@ -23,6 +23,12 @@ export class MatchNFTService {
     return matchNFT;
   }
 
+  async updateMediaUrl(nftId: string, url: string): Promise<void> {
+    await this.matchNFTModel.findByIdAndUpdate(nftId, {
+    mediaUrl: url
+    }).exec();
+  }
+
   async setMinted(id: string): Promise<IMatchNFT | null> {
     const matchNFT = await this.matchNFTModel.findById(id);
     if (!matchNFT) {
@@ -47,6 +53,18 @@ export class MatchNFTService {
         upsert: false
       });
     console.log("Fidelity NFT updated with matchNFTMinted:", fidelityNFT);
+    return matchNFT;
+  }
+
+  async getByMatchIdAndWalletAddress(matchId: string, walletAddress: string): Promise<IMatchNFT | null> {
+    const matchNFT = this.matchNFTModel.findOne({ 
+      matchId : matchId,
+      walletAddress: walletAddress
+    }).exec();
+    if (!matchNFT) {
+      console.log("Match NFT not found for matchId:", matchId);
+      return null;
+    }
     return matchNFT;
   }
 }

@@ -39,11 +39,29 @@ export class MatchNFTController {
             res.status(500).json({ error: "Failed to set match NFT as minted" });
         }
     }
+
+    async getByMatchIdAndWalletAddress(req: express.Request, res: express.Response): Promise<void> {
+        const { matchId, walletAddress } = req.params;
+        const mongooseService = await MongooseService.getInstance();
+        const matchNFTService = mongooseService.matchNFTService;
+        try {
+            const matchNFT = await matchNFTService.getByMatchIdAndWalletAddress(matchId, walletAddress);
+            if (!matchNFT) {
+                res.status(404).json({ error: "Match NFT not found" });
+                return;
+            }
+            res.json(matchNFT);
+        } catch (error) {
+            console.error("Error fetching match NFT:", error);
+            res.status(500).json({ error: "Failed to fetch match NFT" });
+        }
+    }
     
     buildRouter(): express.Router {
         const router = express.Router();
         router.post("/create", express.json(), this.createMatchNFT.bind(this));
         router.post("/:id/set-minted", express.json(), this.setMinted.bind(this));
+        router.get("/:matchId/:walletAddress", this.getByMatchIdAndWalletAddress.bind(this));
         return router;
     }
 }
