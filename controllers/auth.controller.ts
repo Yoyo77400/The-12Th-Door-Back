@@ -11,7 +11,6 @@ export class AuthController {
     return this.instance
   }
 
-
   private async sociosLogin(req: express.Request, res: express.Response): Promise<void> {
     const { walletAddress }  = req.body
     if (!walletAddress) {
