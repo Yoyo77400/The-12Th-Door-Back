@@ -44,13 +44,35 @@ export class MatchNFTController {
         const { matchId, walletAddress } = req.params;
         const mongooseService = await MongooseService.getInstance();
         const matchNFTService = mongooseService.matchNFTService;
+        const matchService = mongooseService.matchService;
+        const match = await matchService.getById(matchId);
+        
         try {
             const matchNFT = await matchNFTService.getByMatchIdAndWalletAddress(matchId, walletAddress);
             if (!matchNFT) {
                 res.status(404).json({ error: "Match NFT not found" });
                 return;
             }
-            res.json(matchNFT);
+            res.json({
+                name: `Match NFT #${matchNFT._id}`,
+                description: `NFT souvenir du match ${match?.homeTeam} - ${match?.awayTeam} joué le ${match?.matchDate.toLocaleDateString("fr-FR")}`,
+                image: matchNFT.mediaUrl,
+                attributes: [
+                    {
+                    trait_type: "Match",
+                    value: `${match?.homeTeam} - ${match?.awayTeam}`
+                    },
+                    {
+                    trait_type: "Date",
+                    value: match?.matchDate.toISOString().split("T")[0]
+                    },
+                    {
+                    trait_type: "Minted",
+                    value: matchNFT.isMinted ? "Yes" : "No"
+                    }
+                ]
+            });
+
         } catch (error) {
             console.error("Error fetching match NFT:", error);
             res.status(500).json({ error: "Failed to fetch match NFT" });

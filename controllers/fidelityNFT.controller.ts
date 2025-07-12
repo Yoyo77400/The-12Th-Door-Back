@@ -1,5 +1,5 @@
 import express from "express";
-import { MongooseService } from "../services/mongoose";
+import { FidelityNFTService, MongooseService } from "../services/mongoose";
 import adminMiddleware from "../middlewares/admin.middleware";
 
 export class FidelityNFTController {
@@ -27,6 +27,16 @@ export class FidelityNFTController {
         }
     }
 
+    private getFidelityLevelName(level: number): string {
+        switch (level) {
+            case 1: return "Bronze";
+            case 2: return "Silver";
+            case 3: return "Gold";
+            case 4: return "Platinum";
+            default: return "Unknown";
+        }
+    }
+
     async getFidelityNFTByWalletAddressAndSeasonId(req: express.Request, res: express.Response): Promise<void> {
         const { walletAddress, seasonId } = req.params;
         const mongooseService = await MongooseService.getInstance();
@@ -37,7 +47,30 @@ export class FidelityNFTController {
                 res.status(404).json({ error: "Fidelity NFT not found" });
                 return;
             }
-            res.json(fidelityNFT);
+            res.json({
+            name: `Fan NFT #${fidelityNFT._id}`,
+            description: `NFT de fidélité pour la saison ${fidelityNFT.seasonId}`,
+            image: fidelityNFT.mediaUrl,
+            attributes: [
+                {
+                trait_type: "Fidelity Level",
+                value: this.getFidelityLevelName(fidelityNFT.fidelityLevel),
+                },
+                {
+                trait_type: "Points",
+                value: fidelityNFT.fidelityPoints,
+                },
+                {
+                trait_type: "Match NFTs Minted",
+                value: fidelityNFT.matchNFTMinted,
+                },
+                {
+                trait_type: "Season",
+                value: fidelityNFT.seasonId,
+                }
+            ]
+            });
+
         } catch (error) {
             console.error("Error fetching Fidelity NFT:", error);
             res.status(500).json({ error: "Failed to fetch Fidelity NFT" });

@@ -26,7 +26,6 @@ export class FidelityNFTService {
     }).exec();
   }
 
-
   async implementMatchNFTMinted(id: string, matchNFTMinted: number): Promise<IFidelityNFT | null> {
     const fidelityNFT = await this.fidelityNFTModel.findByIdAndUpdate(id, { matchNFTMinted }, { new: true }).exec();
     return fidelityNFT;

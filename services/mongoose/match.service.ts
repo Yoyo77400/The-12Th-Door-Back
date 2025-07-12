@@ -20,4 +20,13 @@ export class MatchService {
     const match = await this.matchModel.create(data);
     return match;
   }
+
+  async getById(id: string): Promise<IMatch | null> {
+    const match = await this.matchModel.findById(id
+    ).exec();
+    if (!match) {
+      return null;
+    }
+    return match;
+  }
 }
