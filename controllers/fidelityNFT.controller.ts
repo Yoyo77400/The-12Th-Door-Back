@@ -23,7 +23,6 @@ export class FidelityNFTController {
             const fidelityNFT = await fidelityNFTService.createFidelityNFT(data);
             res.status(201).json(fidelityNFT);
         } catch (error) {
-            console.error("❌ Error creating Fidelity NFT:", error);
             res.status(500).json({ error: "Failed to create Fidelity NFT" });
         }
     }

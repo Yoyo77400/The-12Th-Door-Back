@@ -16,10 +16,12 @@ export class FidelityNFTService {
   }
 
   async createFidelityNFT(data: ICreateFidelityNFT ): Promise<IFidelityNFT> {
-    console.log("Creating fidelity NFT with data:", data);
-    console.log("seasonId type:", typeof data.seasonId);
-    console.log("Final fidelityLevel type:", typeof data.fidelityLevel, "value:", data.fidelityLevel);
     const fidelityNFT = await this.fidelityNFTModel.create(data);
+    return fidelityNFT;
+  }
+
+  async implementMatchNFTMinted(id: string, matchNFTMinted: number): Promise<IFidelityNFT | null> {
+    const fidelityNFT = await this.fidelityNFTModel.findByIdAndUpdate(id, { matchNFTMinted }, { new: true }).exec();
     return fidelityNFT;
   }
 
