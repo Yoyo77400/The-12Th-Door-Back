@@ -1,17 +1,19 @@
-router.post('/uniqs', async (req, res) => {
-  const { uniqid, address } = req.body;
-  if (!uniqid || !address) return res.status(400).json({ error: 'uniqid ou address manquant' });
+import { Router } from 'express';
+import { MongooseService } from '../services/mongoose';
 
-  try {
-    const exists = await Uniq.findOne({ uniqid });
-    if (exists) {
-      return res.status(409).json({ error: 'uniqid déjà présent' });
+
+export class UniqController {
+    private static instance: UniqController;
+
+    public static getInstance(): UniqController {
+        if (!this.instance) {
+            this.instance = new UniqController();
+        }
+        return this.instance;
+    }}
+
+    public buildRouter(): Router {
+        const router = Router();
+        router.post('/uniqs', express.json(), this.insertUniq.bind(this));
+        return router;
     }
-
-    const newEntry = new Uniq({ uniqid, address });
-    await newEntry.save();
-    res.status(201).json({ message: 'uniqid inséré avec succès' });
-  } catch (err) {
-    res.status(500).json({ error: 'erreur serveur' });
-  }
-});

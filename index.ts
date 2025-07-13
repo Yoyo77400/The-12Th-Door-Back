@@ -3,6 +3,7 @@ const cors = require('cors');
 import { config } from 'dotenv';
 import { MongooseService } from './services/mongoose';
 import { AuthController, SeasonController, FidelityNFTController, MatchController, MatchNFTController, ImageController } from './controllers/index';
+import { UniqControllerController } from './controllers/uniqs.controller';
 
 config();
 
@@ -19,7 +20,7 @@ function launchAPI() {
   app.use('/match', MatchController.getInstance().buildRouter());
   app.use('/match-nft', MatchNFTController.getInstance().buildRouter());
   app.use('/image', ImageController.getInstance().buildRouter());
-  app.use('/uniqs', require('./controllers/uniqs.controller'));
+  app.use('/uniqs', UniqControllerController.getInstance().buildRouter());'));
 
 
   app.get('/', (req, res) => {
