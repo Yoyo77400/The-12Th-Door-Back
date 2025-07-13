@@ -1,5 +1,4 @@
 export interface IUniq {
-    _id: string;
-    _key: string;
-
+  code_id: string;
+  wallet_address: string;
 }

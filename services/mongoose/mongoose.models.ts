@@ -4,5 +4,6 @@ export const Models = {
   Match: "Match",
   MatchNFT: "MatchNFT",
   FidelityNFT: "FidelityNFT",
-  Image: "Image"
+  Image: "Image",
+  Uniq: "Uniq",
 };

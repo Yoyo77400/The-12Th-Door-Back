@@ -1,15 +1,24 @@
 import { Mongoose, connect } from "mongoose";
-import { UserService, SeasonService, MatchService, MatchNFTService, FidelityNFTService, ImageService  } from "./index";
+import {
+  UserService,
+  SeasonService,
+  MatchService,
+  MatchNFTService,
+  FidelityNFTService,
+  ImageService,
+  UniqService,
+} from "./index";
 
 export class MongooseService {
   private static instance?: MongooseService;
   public mongoose: Mongoose;
-  public userService : UserService;
+  public userService: UserService;
   public seasonService: SeasonService;
   public matchService: MatchService;
   public matchNFTService: MatchNFTService;
   public fidelityNFTService: FidelityNFTService;
   public imageService: ImageService;
+  public uniqService: UniqService;
 
   private constructor(mongoose: Mongoose) {
     this.mongoose = mongoose;
@@ -19,6 +28,7 @@ export class MongooseService {
     this.matchNFTService = new MatchNFTService(this);
     this.fidelityNFTService = new FidelityNFTService(this);
     this.imageService = new ImageService(this);
+    this.uniqService = new UniqService(this);
   }
 
   public static async getInstance(): Promise<MongooseService> {

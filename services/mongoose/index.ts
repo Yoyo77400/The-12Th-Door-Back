@@ -5,3 +5,4 @@ export * from "./match.service";
 export * from "./matchNFT.service";
 export * from "./fidelityNFT.service";
 export * from "./image.service";
+export * from "./uniq.service";

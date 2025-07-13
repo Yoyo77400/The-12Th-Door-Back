@@ -1,9 +1,16 @@
-import express from 'express';
-const cors = require('cors');
-import { config } from 'dotenv';
-import { MongooseService } from './services/mongoose';
-import { AuthController, SeasonController, FidelityNFTController, MatchController, MatchNFTController, ImageController } from './controllers/index';
-import { UniqControllerController } from './controllers/uniqs.controller';
+import express from "express";
+const cors = require("cors");
+import { config } from "dotenv";
+import { MongooseService } from "./services/mongoose";
+import {
+  AuthController,
+  SeasonController,
+  FidelityNFTController,
+  MatchController,
+  MatchNFTController,
+  ImageController,
+  UniqController,
+} from "./controllers/index";
 
 config();
 
@@ -14,17 +21,16 @@ function launchAPI() {
   app.use(cors());
   app.use(express.json());
 
-  app.use('/auth', AuthController.getInstance().buildRouter());
-  app.use('/season', SeasonController.getInstance().buildRouter());
-  app.use('/fidelity-nft', FidelityNFTController.getInstance().buildRouter());
-  app.use('/match', MatchController.getInstance().buildRouter());
-  app.use('/match-nft', MatchNFTController.getInstance().buildRouter());
-  app.use('/image', ImageController.getInstance().buildRouter());
-  app.use('/uniqs', UniqControllerController.getInstance().buildRouter());'));
+  app.use("/auth", AuthController.getInstance().buildRouter());
+  app.use("/season", SeasonController.getInstance().buildRouter());
+  app.use("/fidelity-nft", FidelityNFTController.getInstance().buildRouter());
+  app.use("/match", MatchController.getInstance().buildRouter());
+  app.use("/match-nft", MatchNFTController.getInstance().buildRouter());
+  app.use("/image", ImageController.getInstance().buildRouter());
+  app.use("/uniqs", UniqController.getInstance().buildRouter());
 
-
-  app.get('/', (req, res) => {
-    res.send('Welcome to The12ThDoor API');
+  app.get("/", (req, res) => {
+    res.send("Welcome to The12ThDoor API");
   });
 
   app.listen(process.env.PORT, async () => {
@@ -33,22 +39,24 @@ function launchAPI() {
 }
 
 async function setupAPI() {
-    const mongooseService = await MongooseService.getInstance();
-    const userService = mongooseService.userService;
-    const rootUser = await userService.getRootUser();
-    if (!rootUser) {
-        if (!process.env.ROOT_PUBLIC_KEY) {
-            throw new Error('ROOT_PUBLIC_KEY environment variable is not set');
-        }
-        const user = await userService.createUser({
-            walletAddress: process.env.ROOT_PUBLIC_KEY,
-            isAdmin: true,
-
-        }, process.env.ROOT_PUBLIC_KEY);
-        console.log('Root user created:', user);
-    } else {
-        console.log('Root user already exists');
+  const mongooseService = await MongooseService.getInstance();
+  const userService = mongooseService.userService;
+  const rootUser = await userService.getRootUser();
+  if (!rootUser) {
+    if (!process.env.ROOT_PUBLIC_KEY) {
+      throw new Error("ROOT_PUBLIC_KEY environment variable is not set");
     }
+    const user = await userService.createUser(
+      {
+        walletAddress: process.env.ROOT_PUBLIC_KEY,
+        isAdmin: true,
+      },
+      process.env.ROOT_PUBLIC_KEY
+    );
+    console.log("Root user created:", user);
+  } else {
+    console.log("Root user already exists");
+  }
 }
 
 async function main() {
@@ -57,6 +65,6 @@ async function main() {
 }
 
 main().catch((error) => {
-  console.error('Error starting The12ThDoor API:', error);
+  console.error("Error starting The12ThDoor API:", error);
   process.exit(1);
 });
