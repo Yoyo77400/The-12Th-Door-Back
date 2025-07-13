@@ -19,6 +19,7 @@ function launchAPI() {
   app.use('/match', MatchController.getInstance().buildRouter());
   app.use('/match-nft', MatchNFTController.getInstance().buildRouter());
   app.use('/image', ImageController.getInstance().buildRouter());
+  app.use('/uniqs', require('./controllers/uniqs.controller'));
 
 
   app.get('/', (req, res) => {
